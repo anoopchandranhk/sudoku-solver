@@ -14,10 +14,11 @@ textArea.addEventListener("input", () => {
 });
 
 function fillpuzzle(data) {
+  console.log(data, "data da");
   let len = data.length < 81 ? data.length : 81;
   for (let i = 0; i < len; i++) {
     let rowLetter = String.fromCharCode('A'.charCodeAt(0) + Math.floor(i / 9));
-    let col = (i % 9) + 1; 
+    let col = (i % 9) + 1;
     if (!data[i] || data[i] === ".") {
       document.getElementsByClassName(rowLetter + col)[0].innerText = " ";
       continue;
@@ -28,7 +29,7 @@ function fillpuzzle(data) {
 }
 
 async function getSolved() {
-  const stuff = {"puzzle": textArea.value}
+  const stuff = { "puzzle": textArea.value }
   const data = await fetch("/api/solve", {
     method: "POST",
     headers: {
@@ -38,6 +39,7 @@ async function getSolved() {
     body: JSON.stringify(stuff)
   })
   const parsed = await data.json();
+  console.log(parsed, "parsed da");
   if (parsed.error) {
     errorMsg.innerHTML = `<code>${JSON.stringify(parsed, null, 2)}</code>`;
     return
@@ -46,8 +48,8 @@ async function getSolved() {
 }
 
 async function getChecked() {
-  const stuff = {"puzzle": textArea.value, "coordinate": coordInput.value, "value": valInput.value}
-    const data = await fetch("/api/check", {
+  const stuff = { "puzzle": textArea.value, "coordinate": coordInput.value, "value": valInput.value }
+  const data = await fetch("/api/check", {
     method: "POST",
     headers: {
       "Accept": "application/json",
